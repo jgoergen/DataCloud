@@ -10,8 +10,8 @@
 
         <style type="text/css">
 
-            body { background-color: black; }
-            canvas { border: 1px solid #ccc; width: 100%; }
+            body { background-color: #FFF; }
+            canvas { border: 1px solid black; width: 100%; }
 
         </style>
     </head>
@@ -19,6 +19,7 @@
         <canvas id="canvas" width="300" height="300"></canvas>
 
         <script src="Scripts/DemoFramework.js" type="text/javascript"></script>
+        <script src="Scripts/DataCloud.js" type="text/javascript"></script>
     </body>
 
     <script type="text/javascript">
@@ -28,7 +29,7 @@
         // put any adjustable settings here that would be interesting to tinker with.
 
         var CANVAS_WIDTH = 800;
-        var CANVAS_HEIGHT = 400;
+        var CANVAS_HEIGHT = 800;
 
         /////////////////////////////////////////////////////////
 
@@ -36,6 +37,9 @@
         var lastTime = 0;
         var date = undefined;
         var elapsed = 0;
+        var dataCloud = undefined;
+        var mouseX = 0;
+        var mouseY = 0;
 
         // code to run before update looping starts.
 
@@ -49,6 +53,35 @@
                     localCtxReference.fillStyle = "white";
                     lastTime = new Date();
                     elapsed = Math.random() * 10000;
+
+                    var names = [
+                        "Jeff",
+                        "Nat",
+                        "Brian",
+                        "Dallas",
+                        "Shane",
+                        "Kalyan",
+                        "Lucy",
+                        "Rachel",
+                        "Amy",
+                        "Steph",
+                        "Andy",
+                        "Chris",
+                        "Dustin",
+                        "Nick"
+                    ];
+
+                    var nameData = [];
+
+                    for (var i = 0; i < 100; i++)
+                        nameData.push(names[Math.floor(Math.random() * names.length)]);
+
+                    dataCloud = new DataCloud({
+                        width: CANVAS_WIDTH,
+                        height: CANVAS_HEIGHT,
+                        data: nameData
+                    });
+
                     resolve();
                 });
         }
@@ -61,6 +94,7 @@
             elapsed += date - lastTime;
             lastTime = date;
             
+            dataCloud.update(ctx, mouseX, mouseY); 
             //console.log("Update");
         }
 
@@ -92,10 +126,12 @@
         function mouseMove(e, isMouseDown) {
 
             //e.x e.y e.speed
+            mouseX = e.x;
+            mouseY = e.y;
+
             if (isMouseDown) {
 
                 console.log("Mouse Move");
-                localCtxReference.fillRect(e.x, e.y, e.speed, e.speed);
             }
         }
 

@@ -12,7 +12,7 @@
     var MOVEMENT_TWEEN_RATE = 10;
     var LIMIT = 40;
     var SWAY_STRENGTH = 5;
-    var SWAY_DECAY_RATE = 100;
+    var SWAY_DECAY_RATE = 0;
     var MAX_VALUE = 35;
 
     /////////////////////////////////////////////////////////
@@ -49,19 +49,17 @@
 
         ctx.clearRect(0, 0, stageWidth, stageHeight);
 
-        recalcPositions();
-
-        if (swayDecay < SWAY_DECAY_RATE)
+        if (SWAY_DECAY_RATE == 0 || swayDecay < SWAY_DECAY_RATE)
             runRandomSway();
 
-        var mouseX = clientX;
-        var mouseY = clientY;
+        recalcPositions();
+
         mouseTargetItem = null;
 
         for (var i = 0; i < qualifiedTags.length; i++) {
 
-            if (mouseX > qualifiedTags[i].x && mouseX < (qualifiedTags[i].x + qualifiedTags[i].width) &&
-                mouseY < qualifiedTags[i].y && mouseY > (qualifiedTags[i].y - qualifiedTags[i].height))
+            if (clientX > qualifiedTags[i].x && clientX < (qualifiedTags[i].x + qualifiedTags[i].width) &&
+                clientY < qualifiedTags[i].y && clientY > (qualifiedTags[i].y - qualifiedTags[i].height))
                 mouseTargetItem = i;
 
             qualifiedTags[i].actualSize += ((qualifiedTags[i].value - qualifiedTags[i].actualSize) / MOVEMENT_TWEEN_RATE);
@@ -216,8 +214,8 @@
 
         } else {
 
-            var baseX = Math.floor(stageWidth / 2) + (Math.floor(Math.random() * 30) - 15);
-            var baseY = Math.floor(stageHeight / 2) + (Math.floor(Math.random() * 30) - 15);
+            var baseX = Math.floor(stageWidth / 2) + (Math.floor(Math.random() * 30) - 14);
+            var baseY = Math.floor(stageHeight / 2) + (Math.floor(Math.random() * 30) - 14);
 
             data.push({
                 phrase: _item,
@@ -234,7 +232,6 @@
             swayDecay = 0;
         }
 
-        console.log(data);
         recalcSizes();
     }
 
@@ -242,6 +239,8 @@
 
     return {
         update: update,
-        addItem: addItem
+        addItem: addItem,
+        mouseTargetItem: mouseTargetItem,
+        targetItem: targetItem
     };
 }

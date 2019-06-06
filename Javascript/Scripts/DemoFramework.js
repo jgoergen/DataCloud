@@ -190,11 +190,16 @@
         if ((e.which === 3 || e.button === 2)) {
 
             isSecondaryMouseDown = true;
-            secondaryMouseDown(e);
+
+            if (window.hasOwnProperty("secondaryMouseDown"))
+                secondaryMouseDown(e);
+
         } else {
 
             isMouseDown = true;
-            mouseDown(e);
+
+            if (window.hasOwnProperty("mouseDown"))
+                mouseDown(e);
         }
     }
 
@@ -203,11 +208,16 @@
         if ((e.which === 3 || e.button === 2)) {
 
             isSecondaryMouseDown = false;
-            secondaryMouseUp(e);
+
+            if (window.hasOwnProperty("secondaryMouseUp"))
+                secondaryMouseUp(e);
+
         } else {
 
             isMouseDown = false;
-            mouseUp(e);
+
+            if (window.hasOwnProperty("mouseUp"))
+                mouseUp(e);
         }
 
         this.lastX = undefined;
@@ -223,12 +233,21 @@
 
         for (var i = 0; i < steps.length; i++) {
 
-            if (!isMouseDown && !isSecondaryMouseDown)
-                mouseMove(steps[i], false);
-            else if (isMouseDown)
-                mouseMove(steps[i], true);
-            else if (isSecondaryMouseDown)
-                secondaryMouseMove(steps[i]);
+            if (!isMouseDown && !isSecondaryMouseDown) {
+
+                if (window.hasOwnProperty("mouseMove"))
+                    mouseMove(steps[i], false);
+
+            } else if (isMouseDown) {
+
+                if (window.hasOwnProperty("mouseMove"))
+                    mouseMove(steps[i], true);
+
+            } else if (isSecondaryMouseDown) {
+
+                if (window.hasOwnProperty("secondaryMouseMove"))
+                    secondaryMouseMove(steps[i]);
+            }
         }
     }
 
